@@ -31,11 +31,10 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    // Log in to Docker Hub and push the image
-                    echo "Pushing image to Docker Hub..."
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS) {
-                        docker.image("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:late").push()
+                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
+                    script {
+                        echo "pushing Docker image to docker hub..."
+                        docker.image("${IMAGE_NAME}:latest").push()
                     }
                 }
             }
