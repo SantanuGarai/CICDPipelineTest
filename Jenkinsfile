@@ -34,7 +34,7 @@ pipeline {
                  withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
                     script {
                         echo "pushing Docker image to docker hub..."
-                        docker.image("${IMAGE_NAME}:late").push()
+                        docker.image("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:late").push()
                     }
                 }
             }
