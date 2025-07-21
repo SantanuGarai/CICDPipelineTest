@@ -20,13 +20,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                //script {
+                script {
                     // Build the Docker image and tag it with the build number
-              //      echo "Building Docker image..."
-              //      def dockerImage = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:late")
-              //  }
-              sh 'docker --version'  // for debugging
-              sh 'docker build -t santanugarai/pipelinetest:late .'
+                    echo "Building Docker image..."
+                    def dockerImage = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:late")
+               }
              
             }
         }
@@ -61,3 +59,5 @@ pipeline {
         }
     }
 }
+
+
