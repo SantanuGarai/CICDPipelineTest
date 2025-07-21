@@ -23,7 +23,6 @@ pipeline {
                 script {
                     // Build the Docker image and tag it with the build number
                     echo "Building Docker image..."
-                    unset DOCKER_HOST
                     def dockerImage = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:late")
                }
              
