@@ -1,4 +1,11 @@
+## [1.3.2](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.3.1...1.3.2) (2025-10-27)
+
 ## [1.3.1](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.3.0...1.3.1) (2025-10-27)
+
+
+### Bug Fixes
+
+* comments added ([687ce5a](https://github.com/SantanuGarai/CICDPipelineTest/commit/687ce5a3acc0dad4573ba228c2ec5d01d7c66fce))
 
 ## [1.3.0](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.2.9...1.3.0) (2025-10-27)
 
