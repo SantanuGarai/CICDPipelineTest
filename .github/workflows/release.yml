@@ -1,12 +1,12 @@
 name: Create Release and Update CHANGELOG
 
 permissions:
-  contents: write # To commit CHANGELOG.md and create a release
+  contents: write
 
 on:
   push:
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+" # Triggers on semantic version tags like 1.2.3
+      - "[0-9]+.[0-9]+.[0-9]" # Triggers on semantic version tags like 1.2.3
 
 jobs:
   release:
@@ -18,29 +18,20 @@ jobs:
           # Fetch all history and tags for the changelog generator
           fetch-depth: 0
 
-      - name: Generate Changelog and Update File
+      - name: Generate Changelog and Commit
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # This tells the action to find CHANGELOG.md,
-          # add the new release notes to the top, and save the file.
           output-file: "CHANGELOG.md"
-          # We set release-count to 1 to only generate notes for the new tag
           release-count: 1
-          # --- IMPORTANT ---
-          # If your tags are 'v1.2.3', set tag-prefix: 'v'
-          # If your tags are '1.2.3', set tag-prefix: ''
-          tag-prefix: "" 
+          tag-prefix: "" # IMPORTANT: Change to 'v' if your tags are like 'v1.2.3'
 
-      - name: Commit updated CHANGELOG.md
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "docs: update CHANGELOG.md for ${{ github.ref_name }}"
-          file_pattern: CHANGELOG.md
-          # Use the default GitHub Actions bot user
-          commit_user_name: github-actions[bot]
-          commit_user_email: github-actions[bot]@users.noreply.github.com
+      #
+      # 🛑 REMOVED THIS STEP 🛑
+      # The step 'stefanzweifel/git-auto-commit-action' was here.
+      # It is not needed because the 'TriPSs' action above already commits the file.
+      #
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
