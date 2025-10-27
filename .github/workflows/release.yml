@@ -1,15 +1,15 @@
-name: Create Release and Update CHANGELOG
+name: Generate CHANGELOG on Merge to Main
 
 permissions:
   contents: write
 
 on:
   push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+"  # runs when tags like 1.0.0, 2.3.4, etc. are pushed
+    branches:
+      - main
 
 jobs:
-  release:
+  changelog:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +25,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: ./CHANGELOG.md
-          release-count: 0                  # include all releases
+          release-count: 0
           tag-prefix: ""
           preset: conventionalcommits
-          append-git-tag: true              # ✅ append new entries instead of overwriting
-          git-message: "chore(release): update CHANGELOG.md for ${{ github.ref_name }} [skip ci]"
+          append-git-tag: true
+          git-message: "chore(changelog): update CHANGELOG.md after merge to main [skip ci]"
           git-branch: main
           skip-on-empty: false
           skip-tag: true
@@ -39,21 +39,12 @@ jobs:
       - name: Commit and Push CHANGELOG (if updated)
         run: |
           if [ -f CHANGELOG.md ]; then
-            echo "CHANGELOG.md found — committing updates..."
+            echo "Committing CHANGELOG updates..."
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add CHANGELOG.md
-            git commit -m "chore(release): update CHANGELOG for ${{ github.ref_name }} [skip ci]" || echo "No changes to commit"
+            git commit -m "chore(changelog): update CHANGELOG.md after merge to main [skip ci]" || echo "No changes to commit"
             git push origin main
           else
             echo "CHANGELOG.md not found — skipping commit"
           fi
-
-      - name: Create or Update GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          body: ${{ steps.changelog.outputs.changelog }}
-          name: Release ${{ github.ref_name }}
-          tag: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
