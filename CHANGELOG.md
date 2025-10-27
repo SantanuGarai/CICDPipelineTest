@@ -6,6 +6,11 @@
 * add few changes ([3b58ca8](https://github.com/SantanuGarai/CICDPipelineTest/commit/3b58ca89f716d1c057f49410e3a3a26539ca0a33))
 * add few extra comments ([55b10c1](https://github.com/SantanuGarai/CICDPipelineTest/commit/55b10c1520d67c6e136a8caf1e6caa28233fe05c))
 
+
+### Bug Fixes
+
+* comments removed 2.1 ([cc4ee9b](https://github.com/SantanuGarai/CICDPipelineTest/commit/cc4ee9b3c1aae76d59d0c8332aa033c083f48bbd))
+
 ## [1.3.1](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.3.0...1.3.1) (2025-10-27)
 
 
