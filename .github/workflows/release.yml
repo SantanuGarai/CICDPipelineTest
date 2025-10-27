@@ -17,20 +17,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: main  # ensure we work on main branch
+          ref: main
 
       - name: Generate or Update CHANGELOG
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          output-file: ./CHANGELOG.md   # ensure it writes to repo root
+          output-file: ./CHANGELOG.md
           release-count: 1
           tag-prefix: ""
           preset: conventionalcommits
           git-message: "chore(release): update CHANGELOG.md for ${{ github.ref_name }}"
           git-branch: main
-          skip-on-empty: false          # generate changelog even if empty
+          skip-on-empty: false
+          skip-git-tag: true          # <-- prevents tag creation
+          create-release: false       # <-- prevent the action from making its own GitHub release
 
       - name: Commit and Push CHANGELOG (if updated)
         run: |
