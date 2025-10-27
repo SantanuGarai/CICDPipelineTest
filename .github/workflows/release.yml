@@ -1,12 +1,12 @@
 name: Create Release and Update CHANGELOG
 
 permissions:
-  contents: write
+  contents: write 
 
 on:
   push:
     tags:
-      - "[0-9]+.[0-9]+.[0-9]" # Triggers on semantic version tags like 1.2.3
+      - "[0-9]+.[0-9]+.[0-9]" 
 
 jobs:
   release:
@@ -15,9 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Fetch all history and tags for the changelog generator
+          # Fetch all history and tags
           fetch-depth: 0
-
+          # Explicitly check out your main branch
+          ref: main ### <--- ADD THIS
+          
       - name: Generate Changelog and Commit
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5
@@ -25,19 +27,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: "CHANGELOG.md"
           release-count: 1
-          tag-prefix: "" # IMPORTANT: Change to 'v' if your tags are like 'v1.2.3'
-
-      #
-      # 🛑 REMOVED THIS STEP 🛑
-      # The step 'stefanzweifel/git-auto-commit-action' was here.
-      # It is not needed because the 'TriPSs' action above already commits the file.
-      #
+          tag-prefix: "" 
+          # Tell the action which branch to commit to
+          git-branch: main ### <--- ADD THIS
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          # Use the changelog notes generated in the 'changelog' step
+          # This step is still correct. 
+          # It uses the notes from the 'changelog' step...
           body: ${{ steps.changelog.outputs.changelog }}
           name: Release ${{ github.ref_name }}
-          tag: ${{ github.ref_name }}
+          # ...and applies them to the tag that triggered the workflow.
+          tag: ${{ github.ref_name }} 
           token: ${{ secrets.GITHUB_TOKEN }}
