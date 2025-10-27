@@ -1,45 +1,50 @@
 name: Create Release and Update CHANGELOG
 
 permissions:
-  contents: write 
+  contents: write
 
 on:
   push:
     tags:
-      - "[0-9]+.[0-9]+.[0-9]" 
+      - "[0-9]+.[0-9]+.[0-9]+"  # triggers on tags like 1.0.0, 2.3.4, etc.
 
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Fetch all history and tags
           fetch-depth: 0
-          # Explicitly check out your main branch
-          ref: main ### <--- ADD THIS
-          
-      - name: Generate Changelog and Commit
+          ref: main  # make sure we’re working on the main branch
+
+      - name: Generate or Update CHANGELOG
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: "CHANGELOG.md"
           release-count: 1
-          tag-prefix: "" 
-          # Tell the action which branch to commit to
-          git-branch: main ### <--- ADD THIS
+          tag-prefix: ""
+          git-message: "chore(release): update CHANGELOG.md for ${{ github.ref_name }}"
+          git-branch: main
+          preset: conventionalcommits
 
-      - name: Create GitHub Release
+      - name: Create or Update GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          # This tells the action to update the release if it already exists
-          allowUpdates: true ### <--- ADD THIS LINE
-          # This step is still correct. 
-          # It uses the notes from the 'changelog' step...
+          allowUpdates: true
           body: ${{ steps.changelog.outputs.changelog }}
           name: Release ${{ github.ref_name }}
-          # ...and applies them to the tag that triggered the workflow.
-          tag: ${{ github.ref_name }} 
+          tag: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Push CHANGELOG (if updated)
+        if: steps.changelog.outputs.skipped != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "chore(release): update CHANGELOG for ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin main
