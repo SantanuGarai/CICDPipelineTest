@@ -34,6 +34,8 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
+          # This tells the action to update the release if it already exists
+          allowUpdates: true ### <--- ADD THIS LINE
           # This step is still correct. 
           # It uses the notes from the 'changelog' step...
           body: ${{ steps.changelog.outputs.changelog }}
