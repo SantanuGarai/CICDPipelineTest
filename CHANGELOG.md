@@ -1,4 +1,11 @@
-## [1.2.8](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.2.7...1.2.8) (2025-10-27)
+## [1.2.10](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.2.9...1.2.10) (2025-10-27)
+
+## [1.2.9](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.2.7...1.2.9) (2025-10-27)
+
+
+### Features
+
+* add changes to test automate file 100 ([4bb7272](https://github.com/SantanuGarai/CICDPipelineTest/commit/4bb72729ae237943c85243feba589cae793b9cec))
 
 ## [1.2.7](https://github.com/SantanuGarai/CICDPipelineTest/compare/1.2.5...1.2.7) (2025-10-27)
 
