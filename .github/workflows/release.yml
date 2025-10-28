@@ -1,15 +1,18 @@
-name: Generate CHANGELOG on Merge to Main
+name: Update CHANGELOG on PR Merge to Main
 
 permissions:
   contents: write
+  pull-requests: read
 
 on:
-  push:
+  pull_request:
+    types: [closed]   # triggers when PR is closed
     branches:
-      - main
+      - main          # only for PRs targeting main
 
 jobs:
-  changelog:
+  generate-changelog:
+    if: github.event.pull_request.merged == true   # ensure it only runs for merged PRs
     runs-on: ubuntu-latest
 
     steps:
@@ -25,25 +28,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: ./CHANGELOG.md
+          preset: conventionalcommits
           release-count: 0
           tag-prefix: ""
-          preset: conventionalcommits
-          append-git-tag: true
-          git-message: "chore(changelog): update CHANGELOG.md after merge to main [skip ci]"
-          git-branch: main
-          skip-on-empty: false
-          skip-tag: true
+          append-git-tag: false              # ✅ ensures new content is added at the top
+          skip-tag: true                     # don't create git tag
           skip-version-file: true
           skip-commit: false
+          git-branch: main
+          git-message: "chore(changelog): update CHANGELOG.md after PR merge [skip ci]"
 
-      - name: Commit and Push CHANGELOG (if updated)
+      - name: Commit and Push CHANGELOG
         run: |
           if [ -f CHANGELOG.md ]; then
-            echo "Committing CHANGELOG updates..."
+            echo "Committing updated CHANGELOG.md..."
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add CHANGELOG.md
-            git commit -m "chore(changelog): update CHANGELOG.md after merge to main [skip ci]" || echo "No changes to commit"
+            git commit -m "chore(changelog): update CHANGELOG.md after PR merge [skip ci]" || echo "No changes to commit"
             git push origin main
           else
             echo "CHANGELOG.md not found — skipping commit"
