@@ -38,7 +38,6 @@ jobs:
                   host: 54.91.4.29
                   username: ubuntu
                   key: ${{ secrets.DEPLOY_SSH_KEY }}
-                  port: 3000
                   script: |
                       set -e
                       # Docker Hub image path: <namespace>/<repo>:latest
