@@ -36,7 +36,7 @@ jobs:
           skip-version-file: true
           skip-commit: false
           git-branch: main
-          git-message: "update CHANGELOG.md after PR merge [skip ci]"
+          git-message: "update CHANGELOG.md after PR merge by @${{ github.actor }} [skip ci]"
 
       - name: Commit and Push CHANGELOG
         run: |
@@ -47,7 +47,7 @@ jobs:
             git config user.name "$GIT_USER"
             git config user.email "$GIT_EMAIL"
             git add CHANGELOG.md
-            git commit -m "update CHANGELOG.md after PR merge [skip ci]" || echo "No changes to commit"
+            git commit -m "update CHANGELOG.md after PR merge by @${{ github.actor }} [skip ci]" || echo "No changes to commit"
             git push origin main
           else
             echo "CHANGELOG.md not found — skipping commit"
