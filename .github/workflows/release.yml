@@ -31,21 +31,23 @@ jobs:
           preset: conventionalcommits
           release-count: 0
           tag-prefix: ""
-          append-git-tag: false              # ✅ ensures new content is added at the top
+          append-git-tag: false              # ensures new content is added at the top
           skip-tag: true                     # don't create git tag
           skip-version-file: true
           skip-commit: false
           git-branch: main
-          git-message: "chore(changelog): update CHANGELOG.md after PR merge [skip ci]"
+          git-message: "update CHANGELOG.md after PR merge [skip ci]"
 
       - name: Commit and Push CHANGELOG
         run: |
           if [ -f CHANGELOG.md ]; then
             echo "Committing updated CHANGELOG.md..."
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            GIT_USER=${{ github.actor }}
+            GIT_EMAIL="${{ github.actor }}@users.noreply.github.com"
+            git config user.name "$GIT_USER"
+            git config user.email "$GIT_EMAIL"
             git add CHANGELOG.md
-            git commit -m "chore(changelog): update CHANGELOG.md after PR merge [skip ci]" || echo "No changes to commit"
+            git commit -m "update CHANGELOG.md after PR merge [skip ci]" || echo "No changes to commit"
             git push origin main
           else
             echo "CHANGELOG.md not found — skipping commit"
